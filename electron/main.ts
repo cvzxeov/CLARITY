@@ -4,12 +4,34 @@ import * as fs from 'fs';
 import * as crypto from 'crypto';
 import { exec } from 'child_process';
 
-const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+const isDev = !app.isPackaged;
+
+// Disable sandboxing in packaged environment to prevent 0xC0000135 (STATUS_DLL_NOT_FOUND)
+// crashes when launched from AppData or paths containing Cyrillic/Unicode characters.
+if (!isDev) {
+  app.commandLine.appendSwitch('no-sandbox');
+  app.commandLine.appendSwitch('disable-gpu-sandbox');
+}
+
+// Hardware acceleration must remain enabled for frameless windows on Windows
 
 function createWindow() {
   const logoAppPath = path.join(__dirname, 'logo_app.png');
   const logoDevPath = path.join(__dirname, '../src/img/logo_app.png');
   const logoWhitePath = path.join(__dirname, '../src/img/logo_white.png');
+
+  let iconPath: string | undefined = undefined;
+  try {
+    if (fs.existsSync(logoAppPath)) {
+      iconPath = logoAppPath;
+    } else if (fs.existsSync(logoDevPath)) {
+      iconPath = logoDevPath;
+    } else if (fs.existsSync(logoWhitePath)) {
+      iconPath = logoWhitePath;
+    }
+  } catch (e) {
+    console.error('Failed to resolve icon path:', e);
+  }
 
   const win = new BrowserWindow({
     width: 1468,
@@ -17,16 +39,13 @@ function createWindow() {
     minWidth: 960,
     minHeight: 640,
     frame: false, // frameless window for custom header buttons
-    icon: fs.existsSync(logoAppPath) 
-      ? logoAppPath 
-      : (fs.existsSync(logoDevPath) 
-        ? logoDevPath 
-        : (fs.existsSync(logoWhitePath) ? logoWhitePath : undefined)),
+    icon: isDev ? iconPath : undefined,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
-      webSecurity: false
+      webSecurity: true,
+      sandbox: false
     },
     autoHideMenuBar: true,
     backgroundColor: '#000000',
@@ -38,10 +57,40 @@ function createWindow() {
     win.webContents.openDevTools();
   } else {
     win.loadFile(path.join(__dirname, '../dist/index.html'));
+
+    // Log renderer errors to a file
+    try {
+      const logPath = path.join(app.getPath('userData'), 'renderer_error.log');
+      win.webContents.on('console-message', (event, level, message, line, sourceId) => {
+        try {
+          fs.appendFileSync(logPath, `[Console level ${level}] ${sourceId}:${line} -> ${message}\n`);
+        } catch (e) {
+          // Silently catch write errors to avoid crashing the main process
+        }
+      });
+    } catch (e) {
+      console.error('Failed to set up console logging to file:', e);
+    }
   }
 }
 
 app.whenReady().then(() => {
+  try {
+    const logPath = path.join(app.getPath('userData'), 'main_process.log');
+    fs.mkdirSync(path.dirname(logPath), { recursive: true });
+    fs.writeFileSync(logPath, `[${new Date().toISOString()}] Clarity Main Process Started. Packaged: ${app.isPackaged}, isDev: ${isDev}\n`);
+
+    app.on('render-process-gone', (event, webContents, details) => {
+      fs.appendFileSync(logPath, `[${new Date().toISOString()}] [Crash] Renderer process gone: ${JSON.stringify(details)}\n`);
+    });
+
+    app.on('child-process-gone', (event, details) => {
+      fs.appendFileSync(logPath, `[${new Date().toISOString()}] [Crash] Child process gone: ${JSON.stringify(details)}\n`);
+    });
+  } catch (e) {
+    console.error('Failed to init main process logging:', e);
+  }
+
   createWindow();
 
   app.on('activate', () => {
@@ -118,11 +167,11 @@ function scanDir(dirPath: string, recursive: boolean, filesList: string[], fallb
     if (entry.name.startsWith('.') || entry.name === 'System Volume Information') continue;
 
     const fullPath = path.join(dirPath, entry.name);
-    
+
     if (entry.isDirectory()) {
       // Don't recurse into target category folders to avoid infinite loops if scanning the same dir
       if (Object.keys(CATEGORIES).includes(entry.name) || entry.name === 'Разное' || entry.name === fallbackName) continue;
-      
+
       if (recursive) {
         scanDir(fullPath, recursive, filesList, fallbackName);
       }
@@ -145,10 +194,10 @@ ipcMain.handle('start-sorting', async (event, folderPath: string, recursive: boo
     for (const filePath of filesList) {
       const ext = path.extname(filePath);
       const baseName = path.basename(filePath, ext);
-      
+
       const category = getCategory(ext, fallbackName);
       const targetFolder = path.join(folderPath, category);
-      
+
       if (!fs.existsSync(targetFolder)) {
         fs.mkdirSync(targetFolder, { recursive: true });
       }
@@ -187,11 +236,11 @@ ipcMain.handle('get-folder-stats', async (event, folderPath: string, recursive: 
       const ext = path.extname(filePath);
       const cat = getCategory(ext, fallbackName);
       stats[cat] = (stats[cat] || 0) + 1;
-      
+
       try {
         const fStat = fs.statSync(filePath);
         totalSize += fStat.size;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     return {
@@ -258,10 +307,10 @@ function scanForDuplicates(dirPath: string, fileList: Array<{ path: string; name
         try {
           const stat = fs.statSync(fullPath);
           fileList.push({ path: fullPath, name: entry.name, size: stat.size });
-        } catch (e) {}
+        } catch (e) { }
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function getFolderSize(dirPath: string): number {
@@ -277,7 +326,7 @@ function getFolderSize(dirPath: string): number {
         size += stat.size;
       }
     }
-  } catch (e) {}
+  } catch (e) { }
   return size;
 }
 
@@ -292,9 +341,9 @@ function cleanDirContents(dirPath: string) {
         } else {
           fs.unlinkSync(fullPath);
         }
-      } catch (e) {}
+      } catch (e) { }
     }
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function removeEmptyDirs(dirPath: string, counter: { count: number }) {
@@ -311,7 +360,7 @@ function removeEmptyDirs(dirPath: string, counter: { count: number }) {
       fs.rmdirSync(dirPath);
       counter.count++;
     }
-  } catch (e) {}
+  } catch (e) { }
 }
 
 ipcMain.handle('get-ram-usage', async () => {
@@ -358,7 +407,7 @@ ipcMain.handle('find-duplicates', async (event, folderPath: string) => {
           const hash = getFileHash(file.path);
           if (!groups[hash]) groups[hash] = [];
           groups[hash].push(file);
-        } catch (e) {}
+        } catch (e) { }
       }
     }
 
@@ -457,10 +506,10 @@ ipcMain.handle('get-large-files', async (event, folderPath: string) => {
             try {
               const stat = fs.statSync(fullPath);
               files.push({ path: fullPath, name: entry.name, size: stat.size });
-            } catch (e) {}
+            } catch (e) { }
           }
         }
-      } catch (e) {}
+      } catch (e) { }
     };
     scan(folderPath);
     files.sort((a, b) => b.size - a.size);

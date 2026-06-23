@@ -50,8 +50,7 @@
   --bg-blend-mode: normal;
   --bg-image: 
     radial-gradient(circle at 50% -20%, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0) 60%),
-    radial-gradient(circle at 10% 30%, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0) 50%),
-    url('./img/y2k_metal_bg.png');
+    radial-gradient(circle at 10% 30%, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0) 50%);
 }
 
 body.light-theme, .light-theme {
@@ -75,8 +74,7 @@ body.light-theme, .light-theme {
   --bg-blend-mode: multiply;
   --bg-image: 
     radial-gradient(circle at 50% -20%, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0) 60%),
-    radial-gradient(circle at 10% 30%, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0) 50%),
-    url('./img/y2k_metal_bg.png');
+    radial-gradient(circle at 10% 30%, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0) 50%);
 }
 
 * {
