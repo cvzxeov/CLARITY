@@ -24,6 +24,9 @@ contextBridge.exposeInMainWorld('api', {
   toggleStartupApp: (name: string, path: string, enabled: boolean) => ipcRenderer.invoke('toggle-startup-app', name, path, enabled),
   readClipboard: () => ipcRenderer.invoke('read-clipboard'),
   openExternalUrl: (url: string) => ipcRenderer.invoke('open-external-url', url),
+  getSystemStats: () => ipcRenderer.invoke('get-system-stats'),
+  setZoomFactor: (factor: number) => ipcRenderer.send('set-zoom-factor', factor),
+  getZoomFactor: () => ipcRenderer.invoke('get-zoom-factor'),
 
   onSortProgress: (callback: (data: any) => void) => {
     const listener = (_event: any, data: any) => callback(data);
@@ -31,3 +34,4 @@ contextBridge.exposeInMainWorld('api', {
     return () => ipcRenderer.removeListener('sort-progress', listener);
   }
 });
+

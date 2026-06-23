@@ -37,6 +37,17 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, theme, lang,
 
         <div className="nav-menu">
           <div
+            className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
+            onClick={() => handleNavClick('home')}
+            onMouseEnter={() => playClick('hover')}
+          >
+            <svg className="nav-icon" viewBox="0 0 24 24">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+            {t.home || (lang === 'ru' ? 'Главная' : 'Home')}
+          </div>
+
+          <div
             className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
             onClick={() => handleNavClick('dashboard')}
             onMouseEnter={() => playClick('hover')}

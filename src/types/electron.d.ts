@@ -31,6 +31,9 @@ declare global {
       getStartupApps: () => Promise<{ success: boolean; apps?: Array<{ name: string; path: string; enabled: boolean }>; error?: string }>;
       toggleStartupApp: (name: string, path: string, enabled: boolean) => Promise<{ success: boolean; error?: string }>;
       readClipboard: () => Promise<string>;
+      getSystemStats: () => Promise<{ success: boolean; stats?: any; error?: string }>;
+      setZoomFactor: (factor: number) => void;
+      getZoomFactor: () => number;
 
       onSortProgress: (callback: (data: { total: number; processed: number; log: string }) => void) => () => void;
     };

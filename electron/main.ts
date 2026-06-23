@@ -54,7 +54,7 @@ function createWindow() {
 
   if (isDev) {
     win.loadURL('http://localhost:5173');
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
   } else {
     win.loadFile(path.join(__dirname, '../dist/index.html'));
 
@@ -304,27 +304,46 @@ function runPowerShell(query: string): Promise<string> {
   });
 }
 
-function getFileHash(filePath: string): string {
-  const buffer = fs.readFileSync(filePath);
-  return crypto.createHash('md5').update(buffer).digest('hex');
+async function getFileHash(filePath: string): Promise<string> {
+  try {
+    const stat = await fs.promises.stat(filePath);
+    const size = stat.size;
+    if (size <= 200 * 1024) {
+      const buffer = await fs.promises.readFile(filePath);
+      return crypto.createHash('md5').update(buffer).digest('hex');
+    }
+    const fd = await fs.promises.open(filePath, 'r');
+    try {
+      const buffer = Buffer.alloc(200 * 1024);
+      await fd.read(buffer, 0, 100 * 1024, 0);
+      await fd.read(buffer, 100 * 1024, 100 * 1024, size - 100 * 1024);
+      return crypto.createHash('md5').update(buffer).digest('hex');
+    } finally {
+      await fd.close();
+    }
+  } catch (e) {
+    return crypto.createHash('md5').update(filePath).digest('hex');
+  }
 }
 
-function scanForDuplicates(dirPath: string, fileList: Array<{ path: string; name: string; size: number }>) {
+async function scanForDuplicates(dirPath: string, fileList: Array<{ path: string; name: string; size: number }>) {
   try {
-    const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+    const entries = await fs.promises.readdir(dirPath, { withFileTypes: true });
     for (const entry of entries) {
       if (entry.name.startsWith('.') || entry.name === 'System Volume Information') continue;
       const fullPath = path.join(dirPath, entry.name);
       if (entry.isDirectory()) {
         if (['Изображения', 'Видео', 'Документы', 'Архивы', 'Аудио', 'Программы', 'Разное'].includes(entry.name)) continue;
-        scanForDuplicates(fullPath, fileList);
+        await scanForDuplicates(fullPath, fileList);
       } else if (entry.isFile()) {
         try {
-          const stat = fs.statSync(fullPath);
+          const stat = await fs.promises.stat(fullPath);
           fileList.push({ path: fullPath, name: entry.name, size: stat.size });
         } catch (e) { }
       }
     }
+    // Yield to the event loop
+    await new Promise(resolve => setTimeout(resolve, 0));
   } catch (e) { }
 }
 
@@ -406,7 +425,7 @@ ipcMain.handle('find-duplicates', async (event, folderPath: string) => {
   try {
     if (!fs.existsSync(folderPath)) throw new Error('Folder does not exist');
     const fileList: Array<{ path: string; name: string; size: number }> = [];
-    scanForDuplicates(folderPath, fileList);
+    await scanForDuplicates(folderPath, fileList);
 
     const sizeGroups: Record<number, typeof fileList> = {};
     for (const f of fileList) {
@@ -419,11 +438,13 @@ ipcMain.handle('find-duplicates', async (event, folderPath: string) => {
       if (files.length < 2) continue;
       for (const file of files) {
         try {
-          const hash = getFileHash(file.path);
+          const hash = await getFileHash(file.path);
           if (!groups[hash]) groups[hash] = [];
           groups[hash].push(file);
         } catch (e) { }
       }
+      // Yield slightly during hashing to prevent UI freeze
+      await new Promise(resolve => setTimeout(resolve, 0));
     }
 
     const confirmedGroups: Record<string, typeof fileList> = {};
@@ -574,3 +595,29 @@ ipcMain.handle('read-clipboard', () => {
 ipcMain.handle('open-external-url', async (event, url: string) => {
   await shell.openExternal(url);
 });
+
+ipcMain.handle('get-system-stats', async () => {
+  try {
+    const psCmd = `$cpuObj=Get-CimInstance Win32_Processor -EA SilentlyContinue;$cpuName=if($cpuObj){$cpuObj.Name}else{'CPU'};$cpuCoresLoad=(Get-CimInstance Win32_PerfFormattedData_PerfOS_Processor -EA SilentlyContinue|Where-Object Name -ne '_Total'|Select-Object -ExpandProperty PercentProcessorTime);$cpuCoresStr=if($cpuCoresLoad){$cpuCoresLoad -join ','}else{''};$cpuLoad=if($cpuObj){[math]::Round(($cpuObj|Measure-Object LoadPercentage -Average).Average)}else{0};$cpuSpeed=if($cpuObj){($cpuObj|Select-Object -ExpandProperty CurrentClockSpeed -First 1)}else{3500};$cpuBaseSpeed=if($cpuObj){($cpuObj|Select-Object -ExpandProperty MaxClockSpeed -First 1)}else{3500};$coresCount=if($cpuObj){($cpuObj|Select-Object -ExpandProperty NumberOfCores -First 1)}else{6};$logicalCount=if($cpuObj){($cpuObj|Select-Object -ExpandProperty NumberOfLogicalProcessors -First 1)}else{12};$l3Cache=if($cpuObj){($cpuObj|Select-Object -ExpandProperty L3CacheSize -First 1)}else{12288};$uptimeSec=0;$os=Get-CimInstance Win32_OperatingSystem -EA SilentlyContinue;if($os){$uptimeSec=[math]::Round(((Get-Date)-$os.LastBootUpTime).TotalSeconds)};$comp=Get-CimInstance Win32_ComputerSystem -EA SilentlyContinue;$virt='Отключено';if($comp -and $comp.HypervisorPresent){$virt='Включено'};$ramTotal=16384;$ramFree=0;if($os){$ramFree=$os.FreePhysicalMemory/1024};$physMem=Get-CimInstance Win32_PhysicalMemory -EA SilentlyContinue;if($physMem){$ramTotalBytes=($physMem|Measure-Object -Property Capacity -Sum).Sum;$ramTotal=[math]::Round($ramTotalBytes/1MB)}elseif($os){$ramTotal=$os.TotalVisibleMemorySize/1024};$ramUsed=$ramTotal-$ramFree;$ramSpeed=3200;$ramSlotsUsed=1;if($physMem){$ramSpeed=($physMem|Select-Object -ExpandProperty Speed -First 1);$ramSlotsUsed=($physMem|Measure-Object).Count};$ramSlotsTotal=4;$memArray=Get-CimInstance Win32_PhysicalMemoryArray -EA SilentlyContinue;if($memArray){$ramSlotsTotal=($memArray|Select-Object -ExpandProperty MemoryDevices -First 1)};$activeAdapter=Get-CimInstance Win32_NetworkAdapter|Where-Object NetConnectionStatus -eq 2|Select-Object -First 1;$alias=if($activeAdapter){$activeAdapter.NetConnectionId}else{'Ethernet'};$netObj=Get-CimInstance Win32_PerfFormattedData_Tcpip_NetworkInterface -EA SilentlyContinue;$netSent=0;$netRecv=0;$netName='Ethernet';if($netObj){$activeNet=$netObj|Sort-Object BytesTotalPersec -Descending|Get-Unique|Select-Object -First 1;if($activeNet){$netSent=$activeNet.BytesSentPersec;$netRecv=$activeNet.BytesReceivedPersec;$netName=$activeNet.Name}};$ipObj=Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias $alias -EA SilentlyContinue|Select-Object -First 1;$ipv4=if($ipObj){$ipObj.IPAddress}else{'192.168.1.100'};$ip6Obj=Get-NetIPAddress -AddressFamily IPv6 -InterfaceAlias $alias -EA SilentlyContinue|Select-Object -First 1;$ipv6=if($ip6Obj){$ip6Obj.IPAddress}else{'fe80::1'};$gpuObj=Get-CimInstance Win32_VideoController -EA SilentlyContinue;$gpuName='GPU';$driverVersion='';$driverDate='';$vramTotalBytes=0;if($gpuObj){$activeGpu=$gpuObj|Select-Object -First 1;$gpuName=$activeGpu.Name;$driverVersion=$activeGpu.DriverVersion;$driverDate=if($activeGpu.DriverDate){(Get-Date $activeGpu.DriverDate).ToString('dd.MM.yyyy')}else{''}};$vramUsedBytes=0;$gpuTemp=40;$gpuLoad=0;$gpuEngines=Get-CimInstance Win32_PerfFormattedData_GPUPerformanceMonitor_GPUEngine -EA SilentlyContinue;if($gpuEngines){$gpuLoad=($gpuEngines|Measure-Object -Property UtilizationPercentage -Maximum).Maximum};if(Get-Command nvidia-smi -EA SilentlyContinue){$nvidiaQuery=&nvidia-smi --query-gpu=memory.total,memory.used,temperature.gpu,utilization.gpu --format=csv,noheader,nounits 2>$null;if($nvidiaQuery){$parts=$nvidiaQuery -split ',';if($parts.Length -ge 4){$vramTotalBytes=[long]$parts[0].Trim()*1MB;$vramUsedBytes=[long]$parts[1].Trim()*1MB;$gpuTemp=[int]$parts[2].Trim();$gpuLoad=[int]$parts[3].Trim()}}}else{if($gpuObj){$activeGpu=$gpuObj|Select-Object -First 1;$vramTotalBytes=$activeGpu.AdapterRAM;if($vramTotalBytes -lt 0){$vramTotalBytes=$vramTotalBytes+4294967296}};$gpuMemory=Get-CimInstance Win32_PerfFormattedData_GPUPerformanceMonitor_GPUAdapterMemory -EA SilentlyContinue;if($gpuMemory){$vramUsedBytes=($gpuMemory|Measure-Object -Property DedicatedUsage -Sum).Sum}};@{cpuName=$cpuName;cpu=[math]::Round($cpuLoad);cpuSpeed=[math]::Round($cpuSpeed/1000,2);cpuBaseSpeed=[math]::Round($cpuBaseSpeed/1000,2);cores=$coresCount;logical=$logicalCount;l3Cache=[math]::Round($l3Cache/1024,1);uptime=$uptimeSec;virt=$virt;cpuCores=$cpuCoresStr;ramUsed=[math]::Round($ramUsed);ramTotal=[math]::Round($ramTotal);ramSpeed=$ramSpeed;ramSlots=$ramSlotsUsed;ramSlotsTotal=$ramSlotsTotal;netName=$netName;netSent=$netSent;netRecv=$netRecv;ipv4=$ipv4;ipv6=$ipv6;gpu=[math]::Round($gpuLoad);gpuName=$gpuName;gpuTemp=$gpuTemp;vramUsed=[math]::Round($vramUsedBytes/1MB);vramTotal=[math]::Round($vramTotalBytes/1MB);gpuDriver=$driverVersion;gpuDriverDate=$driverDate}|ConvertTo-Json`;
+    const result = await runPowerShell(psCmd);
+    if (!result) return { success: false, error: 'Empty result' };
+    const data = JSON.parse(result);
+    return { success: true, stats: data };
+  } catch (e: any) {
+    return { success: false, error: e.message, stats: { cpuName: 'CPU', cpu: 0, cpuSpeed: 3.5, cpuBaseSpeed: 3.5, cores: 6, logical: 12, l3Cache: 24, uptime: 3600, virt: 'Включено', cpuCores: '0,0,0,0,0,0,0,0,0,0,0,0', gpu: 0, gpuName: 'GPU', gpuTemp: 40, ramUsed: 0, ramTotal: 16384, ramSpeed: 3200, ramSlots: 2, ramSlotsTotal: 4, netName: 'Ethernet', netSent: 0, netRecv: 0, ipv4: '192.168.1.100', ipv6: 'fe80::1', vramUsed: 0, vramTotal: 8192, gpuDriver: '555.55', gpuDriverDate: '19.05.2026' } };
+  }
+});
+
+ipcMain.on('set-zoom-factor', (event, factor: number) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (win) {
+    win.webContents.setZoomFactor(factor);
+  }
+});
+
+ipcMain.handle('get-zoom-factor', (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  return win ? win.webContents.getZoomFactor() : 1.0;
+});
+
+

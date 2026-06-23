@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import Settings from './components/Settings';
 import Utilities from './components/Utilities';
 import BackgroundLogo from './components/BackgroundLogo';
+import HomeView from './components/HomeView';
 import { Language, translateCategories, CATEGORY_TRANSLATIONS } from './utils/translations';
 
 interface LogEntry {
@@ -13,7 +14,7 @@ interface LogEntry {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('home');
   const [activeSubTab, setActiveSubTab] = useState<'hub' | 'sorter' | 'utilities'>('hub');
   const [focusTool, setFocusTool] = useState<string | null>(null);
   const [showSupportModal, setShowSupportModal] = useState(false);
@@ -67,6 +68,14 @@ function App() {
       }
     };
     loadCategories();
+  }, []);
+
+  // Load and apply persisted zoom factor on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('clarity-zoom');
+    if (saved && window.api && window.api.setZoomFactor) {
+      window.api.setZoomFactor(parseFloat(saved));
+    }
   }, []);
 
   const prevLangRef = useRef<Language>(lang);
@@ -162,6 +171,12 @@ function App() {
           onSupportClick={() => setShowSupportModal(true)}
         />
         <div className="main-content">
+          {activeTab === 'home' && (
+            <HomeView 
+              lang={lang}
+              theme={theme}
+            />
+          )}
           {activeTab === 'dashboard' && (
             <Dashboard 
               folderPath={folderPath} 

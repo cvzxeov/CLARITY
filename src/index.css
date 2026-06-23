@@ -1041,7 +1041,7 @@ body {
   background: rgba(var(--accent-rgb), 0.05);
   color: var(--accent);
   border: 1px solid rgba(var(--accent-rgb), 0.15);
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, width 0.2s, height 0.2s;
 }
 
 .launcher-card:hover .launcher-card-icon-wrapper {
@@ -1053,6 +1053,18 @@ body {
 .launcher-icon {
   width: 20px;
   height: 20px;
+  transition: width 0.2s, height 0.2s;
+}
+
+@media (min-width: 1200px) {
+  .launcher-card-icon-wrapper {
+    width: 56px;
+    height: 56px;
+  }
+  .launcher-icon {
+    width: 28px;
+    height: 28px;
+  }
 }
 
 .launcher-card-info {

@@ -317,6 +317,52 @@ export const Utilities: React.FC<UtilitiesProps> = ({
     handleFindDuplicates();
   };
 
+  const autoSelectDuplicates = () => {
+    playClick('click');
+    const newSelected = new Set<string>();
+    Object.values(duplicates).forEach(files => {
+      if (files.length <= 1) return;
+      for (let i = 1; i < files.length; i++) {
+        newSelected.add(files[i].path);
+      }
+    });
+    setSelectedDuplicates(newSelected);
+    addLog(`Auto-selected ${newSelected.size} duplicate copies.`, 'info');
+  };
+
+  const handleDeleteAllDuplicates = async () => {
+    playClick('click');
+    const copiesToDelete: string[] = [];
+    Object.values(duplicates).forEach(files => {
+      if (files.length <= 1) return;
+      for (let i = 1; i < files.length; i++) {
+        copiesToDelete.push(files[i].path);
+      }
+    });
+
+    if (copiesToDelete.length === 0) return;
+
+    const confirmMsg = t.dupDeleteConfirm || 'Are you sure you want to delete all duplicates (leaving one original from each group)?';
+    const confirmed = window.confirm(`${confirmMsg}\n\nTotal files to delete: ${copiesToDelete.length}`);
+    if (!confirmed) return;
+
+    addLog(`Deleting ${copiesToDelete.length} duplicate files in one click...`, 'info');
+
+    let deletedCount = 0;
+    for (const filePath of copiesToDelete) {
+      const result = await window.api.deleteFile(filePath);
+      if (result.success) {
+        deletedCount++;
+      } else {
+        addLog(`Failed to delete ${filePath}: ${result.error}`, 'error');
+      }
+    }
+
+    addLog(`Successfully removed ${deletedCount} duplicate files.`, 'success');
+    setSelectedDuplicates(new Set());
+    handleFindDuplicates();
+  };
+
   // 4. Empty Folders Purger
   const handlePurgeEmptyFolders = async () => {
     if (isPurgingFolders || !window.api || !targetPath) return;
@@ -591,6 +637,25 @@ export const Utilities: React.FC<UtilitiesProps> = ({
             >
               {isSearchingDups ? t.searching : t.dupScan}
             </button>
+
+            {Object.keys(duplicates).length > 0 && (
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                <button
+                  className="action-btn-main"
+                  onClick={autoSelectDuplicates}
+                  style={{ flex: 1, fontSize: '9px', padding: '8px 4px' }}
+                >
+                  {t.selectCopies || 'Select Copies'}
+                </button>
+                <button
+                  className="action-btn-main"
+                  onClick={handleDeleteAllDuplicates}
+                  style={{ flex: 1, fontSize: '9px', padding: '8px 4px', backgroundColor: '#ff3333', borderColor: '#ff3333', color: '#ffffff' }}
+                >
+                  {t.deleteAllDups || 'Delete All'}
+                </button>
+              </div>
+            )}
 
             {Object.keys(duplicates).length > 0 ? (
               <div className="duplicates-wrapper" style={{ maxHeight: '280px', overflowY: 'auto', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '8px' }}>

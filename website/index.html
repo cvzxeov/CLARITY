@@ -73,7 +73,7 @@
                         <p class="hero-desc" data-i18n="heroDesc">
                             Clarity is a powerful, beautifully designed Desktop Application for File Organization, PC Optimization, and System Cleaning. Built for speed. Designed for aesthetics.
                         </p>
-                        <a href="https://github.com/cvzxeov/CLARITY/releases/download/v1.0.2/Clarity-Setup.exe" class="btn-download magnetic">
+                        <a href="https://github.com/cvzxeov/CLARITY/releases/download/v1.0.3/Clarity-Setup.exe" class="btn-download magnetic">
                             <span data-i18n="downloadBtn">DOWNLOAD FOR WINDOWS</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </a>
@@ -291,46 +291,55 @@
                             <button class="mockup-btn">ВЫБРАТЬ ПАПКУ</button>
                         </div>
 
-                        <div class="mockup-dashboard-grid">
-                            <div class="mockup-dash-card">
-                                <div class="icon-box">📁</div>
-                                <div class="dash-card-title">СОРТИРОВЩИК ФАЙЛОВ</div>
-                                <div class="dash-card-desc">Упорядочить файлы по категориям.</div>
+                        <div class="mockup-dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="mockup-dash-card" style="display: flex; flex-direction: column; gap: 12px; background: rgba(0, 229, 255, 0.05); border: 1px solid rgba(0, 229, 255, 0.2);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div>
+                                        <div style="color: #00e5ff; font-weight: 700; font-size: 14px; margin-bottom: 4px;">CPU</div>
+                                        <div style="color: var(--fg-muted); font-size: 9px;">Intel Core i5</div>
+                                    </div>
+                                    <div style="color: #00e5ff; font-weight: 700; font-size: 18px; font-family: monospace;">24%</div>
+                                </div>
+                                <div style="flex: 1; min-height: 80px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(0, 229, 255, 0.1); border-radius: 6px;"></div>
                             </div>
-                            <div class="mockup-dash-card">
-                                <div class="icon-box">⚡</div>
-                                <div class="dash-card-title">ОПТИМИЗАЦИЯ ОЗУ</div>
-                                <div class="dash-card-desc">Выгрузить неиспользуемую память ОЗУ.</div>
+                            <div class="mockup-dash-card" style="display: flex; flex-direction: column; gap: 12px; background: rgba(124, 77, 255, 0.05); border: 1px solid rgba(124, 77, 255, 0.2);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div>
+                                        <div style="color: #7c4dff; font-weight: 700; font-size: 14px; margin-bottom: 4px;">RAM</div>
+                                        <div style="color: var(--fg-muted); font-size: 9px;">64.0 GB Memory</div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="color: #7c4dff; font-weight: 700; font-size: 18px; font-family: monospace;">13.8 GB</div>
+                                        <div style="color: var(--fg-muted); font-size: 11px; font-family: monospace;">22%</div>
+                                    </div>
+                                </div>
+                                <div style="flex: 1; min-height: 80px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(124, 77, 255, 0.1); border-radius: 6px;"></div>
                             </div>
-                            <div class="mockup-dash-card">
-                                <div class="icon-box">🗑️</div>
-                                <div class="dash-card-title">УБОРКА КЭША</div>
-                                <div class="dash-card-desc">Очистить временные системные файлы.</div>
+                            <div class="mockup-dash-card" style="display: flex; flex-direction: column; gap: 12px; background: rgba(255, 145, 0, 0.05); border: 1px solid rgba(255, 145, 0, 0.2);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div>
+                                        <div style="color: #ff9100; font-weight: 700; font-size: 14px; margin-bottom: 4px;">GPU</div>
+                                        <div style="color: var(--fg-muted); font-size: 9px;">NVIDIA RTX</div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="color: #ff9100; font-weight: 700; font-size: 18px; font-family: monospace;">11%</div>
+                                        <div style="color: #ff5252; font-size: 12px; font-weight: 700; font-family: monospace;">46 °C</div>
+                                    </div>
+                                </div>
+                                <div style="flex: 1; min-height: 80px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 145, 0, 0.1); border-radius: 6px;"></div>
                             </div>
-                            <div class="mockup-dash-card">
-                                <div class="icon-box">📄</div>
-                                <div class="dash-card-title">ПОИСК ДУБЛИКАТОВ</div>
-                                <div class="dash-card-desc">Найти и стереть одинаковые файлы.</div>
-                            </div>
-                            <div class="mockup-dash-card">
-                                <div class="icon-box">📂</div>
-                                <div class="dash-card-title">УДАЛЕНИЕ ПУСТЫХ ПАПОК</div>
-                                <div class="dash-card-desc">Удалить папки без единого файла.</div>
-                            </div>
-                            <div class="mockup-dash-card">
-                                <div class="icon-box">🔍</div>
-                                <div class="dash-card-title">РАДАР ТЯЖЕЛЫХ ФАЙЛОВ</div>
-                                <div class="dash-card-desc">Найти и удалить тяжелые файлы.</div>
-                            </div>
-                            <div class="mockup-dash-card">
-                                <div class="icon-box">📋</div>
-                                <div class="dash-card-title">БУФЕР ОБМЕНА</div>
-                                <div class="dash-card-desc">Следить за скопированным текстом.</div>
-                            </div>
-                            <div class="mockup-dash-card">
-                                <div class="icon-box">🚀</div>
-                                <div class="dash-card-title">ОПТИМИЗАЦИЯ АВТОЗАГРУЗКИ</div>
-                                <div class="dash-card-desc">Управление автозапуском программ.</div>
+                            <div class="mockup-dash-card" style="display: flex; flex-direction: column; gap: 12px; background: rgba(255, 23, 68, 0.05); border: 1px solid rgba(255, 23, 68, 0.2);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div>
+                                        <div style="color: #ff1744; font-weight: 700; font-size: 14px; margin-bottom: 4px;">NETWORK</div>
+                                        <div style="color: var(--fg-muted); font-size: 9px;">Ethernet</div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="color: #ff1744; font-weight: 700; font-size: 12px; font-family: monospace;">↓ 285.2 Kbps</div>
+                                        <div style="color: #00e5ff; font-weight: 700; font-size: 12px; font-family: monospace;">↑ 20.0 Kbps</div>
+                                    </div>
+                                </div>
+                                <div style="flex: 1; min-height: 80px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 23, 68, 0.1); border-radius: 6px;"></div>
                             </div>
                         </div>
                     </div>

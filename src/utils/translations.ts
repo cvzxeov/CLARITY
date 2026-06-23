@@ -99,7 +99,17 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     categoryConfig: 'Category Config',
     unsupported: 'All other formats',
     noExtensions: 'No formats configured. Add some below.',
-    alreadyExists: 'Format already exists in this category!'
+    alreadyExists: 'Format already exists in this category!',
+    home: 'Home',
+    uiScale: 'UI Scaling',
+    hwMonitor: 'Hardware Load',
+    cpuLoad: 'CPU Load',
+    gpuLoad: 'GPU Load',
+    vramLoad: 'VRAM',
+    ramLoad: 'RAM',
+    selectCopies: 'Select Copies',
+    deleteAllDups: 'Delete All Duplicates',
+    dupDeleteConfirm: 'Are you sure you want to delete all duplicates (leaving one original from each group)?'
   },
   ru: {
     manage: 'Управление',
@@ -148,7 +158,17 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     categoryConfig: 'Настройка категорий',
     unsupported: 'Все остальные расширения',
     noExtensions: 'Нет расширений. Добавьте новые расширения ниже.',
-    alreadyExists: 'Расширение уже есть в этой категории!'
+    alreadyExists: 'Расширение уже есть в этой категории!',
+    home: 'Главная',
+    uiScale: 'Масштаб интерфейса',
+    hwMonitor: 'Нагрузка оборудования',
+    cpuLoad: 'Нагрузка ЦП',
+    gpuLoad: 'Нагрузка ГП',
+    vramLoad: 'Видеопамять',
+    ramLoad: 'ОЗУ',
+    selectCopies: 'Выбрать копии',
+    deleteAllDups: 'Удалить все дубликаты',
+    dupDeleteConfirm: 'Вы уверены, что хотите удалить все дубликаты (оставив по одной оригинальной копии в каждой группе)?'
   },
   zh: {
     manage: '管理',

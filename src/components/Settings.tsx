@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { playClick } from '../utils/audio';
 import { TRANSLATIONS, Language } from '../utils/translations';
 
@@ -11,6 +11,20 @@ interface SettingsProps {
 
 const Settings: React.FC<SettingsProps> = ({ theme, setTheme, lang, setLang }) => {
   const t = TRANSLATIONS[lang];
+
+  const [zoomLevel, setZoomLevel] = useState<number>(() => {
+    const saved = localStorage.getItem('clarity-zoom');
+    return saved ? parseFloat(saved) : 1.0;
+  });
+
+  const handleZoomChange = (factor: number) => {
+    playClick('click');
+    setZoomLevel(factor);
+    localStorage.setItem('clarity-zoom', factor.toString());
+    if (window.api && window.api.setZoomFactor) {
+      window.api.setZoomFactor(factor);
+    }
+  };
 
   const handleThemeChange = (newTheme: 'dark' | 'light') => {
     playClick('click');
@@ -141,6 +155,17 @@ const Settings: React.FC<SettingsProps> = ({ theme, setTheme, lang, setLang }) =
     { code: 'id', name: 'Bahasa Indonesia' }
   ];
 
+  const lUiScale = t.uiScale || (lang === 'ru' ? 'Масштаб интерфейса' : 'UI Scaling');
+
+  const zoomOptions = [
+    { label: '75%', value: 0.75 },
+    { label: '90%', value: 0.90 },
+    { label: '100%', value: 1.00 },
+    { label: '110%', value: 1.10 },
+    { label: '125%', value: 1.25 },
+    { label: '150%', value: 1.50 },
+  ];
+
   return (
     <div className="settings-content" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       {/* Top Header */}
@@ -152,25 +177,65 @@ const Settings: React.FC<SettingsProps> = ({ theme, setTheme, lang, setLang }) =
 
       <div className="dashboard-grid" style={{ gridTemplateColumns: '1fr 1.5fr', gap: '32px' }}>
         
-        {/* Card 1: Theme Switcher */}
-        <div className="panel-card" style={{ padding: '24px' }}>
-          <span className="panel-card-title">{t.theme}</span>
-          <div className="switcher-segment" style={{ marginTop: '12px' }}>
-            <div 
-              className={`switcher-option ${theme === 'light' ? 'active' : ''}`}
-              onClick={() => handleThemeChange('light')}
-              onMouseEnter={() => playClick('hover')}
-            >
-              {t.light}
+        {/* Left Column: Theme and Scaling */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          {/* Card 1: Theme Switcher */}
+          <div className="panel-card" style={{ padding: '24px' }}>
+            <span className="panel-card-title">{t.theme}</span>
+            <div className="switcher-segment" style={{ marginTop: '12px' }}>
+              <div 
+                className={`switcher-option ${theme === 'light' ? 'active' : ''}`}
+                onClick={() => handleThemeChange('light')}
+                onMouseEnter={() => playClick('hover')}
+              >
+                {t.light}
+              </div>
+              <div 
+                className={`switcher-option ${theme === 'dark' ? 'active' : ''}`}
+                onClick={() => handleThemeChange('dark')}
+                onMouseEnter={() => playClick('hover')}
+              >
+                {t.dark}
+              </div>
+              <div className={`switcher-bg ${theme === 'dark' ? 'right' : ''}`}></div>
             </div>
-            <div 
-              className={`switcher-option ${theme === 'dark' ? 'active' : ''}`}
-              onClick={() => handleThemeChange('dark')}
-              onMouseEnter={() => playClick('hover')}
-            >
-              {t.dark}
+          </div>
+
+          {/* Card 3: UI Scaling */}
+          <div className="panel-card" style={{ padding: '24px' }}>
+            <span className="panel-card-title" style={{ marginBottom: '16px', display: 'block' }}>{lUiScale}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {zoomOptions.map((opt) => {
+                const isSelected = Math.abs(zoomLevel - opt.value) < 0.01;
+                return (
+                  <div
+                    key={opt.value}
+                    onClick={() => handleZoomChange(opt.value)}
+                    onMouseEnter={() => playClick('hover')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '12px 16px',
+                      borderRadius: 'var(--border-radius-md)',
+                      background: isSelected ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.02)',
+                      border: '1px solid',
+                      borderColor: isSelected ? 'var(--accent)' : 'var(--border-color)',
+                      color: isSelected ? 'var(--text-primary)' : 'var(--text-muted)',
+                      cursor: 'pointer',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span>{opt.label}</span>
+                    {isSelected && (
+                      <span style={{ color: 'var(--accent)', fontSize: '10px' }}>●</span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-            <div className={`switcher-bg ${theme === 'dark' ? 'right' : ''}`}></div>
           </div>
         </div>
 
