@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "File Organizer Desktop Application",
   "main": "dist-electron/main.js",
-  "author": "Antigravity",
+  "author": "cvzxeov",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -12,11 +12,12 @@ export default defineConfig({
     minify: 'esbuild',
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-        }
+        // Use iife format so Electron can load via file:// without CORS/module issues
+        format: 'iife',
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        inlineDynamicImports: true // required for iife
       }
     }
   }
