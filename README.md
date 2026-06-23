@@ -16,7 +16,7 @@ Clarity is a powerful, beautifully designed Desktop Application for File Organiz
 
 ### For Regular Users (Windows)
 1. Go to the **Releases** page (or use the provided `.exe` file).
-2. Download `Clarity-Setup-1.0.0.exe`.
+2. Download `Clarity-Setup.exe`.
 3. Run the installer.
 4. During setup, **you can choose the installation folder** of your preference.
 5. Launch Clarity from the desktop shortcut or start menu!
