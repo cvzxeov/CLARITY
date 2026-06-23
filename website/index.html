@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLARITY - Avant-Garde PC Optimization</title>
+    
+    <!-- Google Fonts for Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500;700&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="icon" type="image/png" href="src/img/logo_white.png">
+</head>
+<body class="dark-theme">
+
+    <!-- Abstract Background Elements -->
+    <div class="abstract-shape shape-1"></div>
+    <div class="abstract-shape shape-2"></div>
+    <div class="abstract-shape shape-3"></div>
+
+    <header class="nav-bar">
+        <div class="brand">
+            <img id="logo-img" src="src/img/logo_white.png" alt="Clarity Logo" class="logo-mark-img">
+            <span class="logo-text">CLARITY</span>
+        </div>
+        <div class="controls">
+            <button id="lang-toggle" class="control-btn magnetic">RU</button>
+            <button id="theme-toggle" class="control-btn magnetic">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-sun">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero reveal">
+            <div class="container hero-content">
+                <div class="hero-split">
+                    <div class="hero-left">
+                        <div class="hero-kicker" data-i18n="heroKicker">0001.454 SYSTEM PURITY</div>
+                        <h1 class="hero-title">
+                            Clarity
+                        </h1>
+                        <p class="hero-desc" data-i18n="heroDesc">
+                            Clarity is a powerful, beautifully designed Desktop Application for File Organization, PC Optimization, and System Cleaning. Built for speed. Designed for aesthetics.
+                        </p>
+                        <a href="https://github.com/cvzxeov/CLARITY/releases/latest/download/setup.exe" class="btn-download magnetic">
+                            <span data-i18n="downloadBtn">DOWNLOAD FOR WINDOWS</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                    <div class="hero-right">
+                        <div class="orbital-system">
+                            <div class="orbit orbit-1"></div>
+                            <div class="orbit orbit-2"></div>
+                            <div class="orbit orbit-3"></div>
+                            <div class="orbit-core"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 data-i18n="featuresTitle">ARSENAL</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="features-list">
+                    
+                    <div class="feature-item reveal">
+                        <div class="feature-header">
+                            <div class="feature-title-group">
+                                <div class="feature-num">01</div>
+                                <div class="feature-info">
+                                    <h3 data-i18n="feat1Title">FILE SORTER</h3>
+                                    <p class="feature-short-desc" data-i18n="feat1Desc">Intelligently organize messy directories by grouping files into categorized folders based on extensions.</p>
+                                </div>
+                            </div>
+                            <button class="btn-more" data-i18n="learnMoreBtn">LEARN MORE</button>
+                        </div>
+                        <div class="feature-details">
+                            <div class="details-inner" data-i18n="feat1Ext">
+                                Detailed workflow automation.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item reveal">
+                        <div class="feature-header">
+                            <div class="feature-title-group">
+                                <div class="feature-num">02</div>
+                                <div class="feature-info">
+                                    <h3 data-i18n="feat2Title">RAM OPTIMIZER</h3>
+                                    <p class="feature-short-desc" data-i18n="feat2Desc">Visualize your active memory load and purge inactive working sets to free up system resources.</p>
+                                </div>
+                            </div>
+                            <button class="btn-more" data-i18n="learnMoreBtn">LEARN MORE</button>
+                        </div>
+                        <div class="feature-details">
+                            <div class="details-inner" data-i18n="feat2Ext">
+                                Detailed memory management.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item reveal">
+                        <div class="feature-header">
+                            <div class="feature-title-group">
+                                <div class="feature-num">03</div>
+                                <div class="feature-info">
+                                    <h3 data-i18n="feat3Title">SYSTEM SWEEPER</h3>
+                                    <p class="feature-short-desc" data-i18n="feat3Desc">Quickly detect and wipe temporary files, Windows cache, and junk data.</p>
+                                </div>
+                            </div>
+                            <button class="btn-more" data-i18n="learnMoreBtn">LEARN MORE</button>
+                        </div>
+                        <div class="feature-details">
+                            <div class="details-inner" data-i18n="feat3Ext">
+                                Detailed sweep data.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item reveal">
+                        <div class="feature-header">
+                            <div class="feature-title-group">
+                                <div class="feature-num">04</div>
+                                <div class="feature-info">
+                                    <h3 data-i18n="feat4Title">DOUBLE-TAKE</h3>
+                                    <p class="feature-short-desc" data-i18n="feat4Desc">Scan and safely remove duplicate files to recover precious disk space.</p>
+                                </div>
+                            </div>
+                            <button class="btn-more" data-i18n="learnMoreBtn">LEARN MORE</button>
+                        </div>
+                        <div class="feature-details">
+                            <div class="details-inner" data-i18n="feat4Ext">
+                                Duplicate finding algo details.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item reveal">
+                        <div class="feature-header">
+                            <div class="feature-title-group">
+                                <div class="feature-num">05</div>
+                                <div class="feature-info">
+                                    <h3 data-i18n="feat5Title">FOLDER PURGER</h3>
+                                    <p class="feature-short-desc" data-i18n="feat5Desc">Recursively locate and remove empty, useless directories across your drive.</p>
+                                </div>
+                            </div>
+                            <button class="btn-more" data-i18n="learnMoreBtn">LEARN MORE</button>
+                        </div>
+                        <div class="feature-details">
+                            <div class="details-inner" data-i18n="feat5Ext">
+                                Purging info.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item reveal">
+                        <div class="feature-header">
+                            <div class="feature-title-group">
+                                <div class="feature-num">06</div>
+                                <div class="feature-info">
+                                    <h3 data-i18n="feat6Title">BIG FILE RADAR</h3>
+                                    <p class="feature-short-desc" data-i18n="feat6Desc">Scan the filesystem to locate and optionally delete the heaviest files hogging storage.</p>
+                                </div>
+                            </div>
+                            <button class="btn-more" data-i18n="learnMoreBtn">LEARN MORE</button>
+                        </div>
+                        <div class="feature-details">
+                            <div class="details-inner" data-i18n="feat6Ext">
+                                Radar details.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item reveal">
+                        <div class="feature-header">
+                            <div class="feature-title-group">
+                                <div class="feature-num">07</div>
+                                <div class="feature-info">
+                                    <h3 data-i18n="feat7Title">CLIPBOARD VAULT</h3>
+                                    <p class="feature-short-desc" data-i18n="feat7Desc">Securely keep a history of copied text fragments for quick access.</p>
+                                </div>
+                            </div>
+                            <button class="btn-more" data-i18n="learnMoreBtn">LEARN MORE</button>
+                        </div>
+                        <div class="feature-details">
+                            <div class="details-inner" data-i18n="feat7Ext">
+                                Vault details.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item reveal">
+                        <div class="feature-header">
+                            <div class="feature-title-group">
+                                <div class="feature-num">08</div>
+                                <div class="feature-info">
+                                    <h3 data-i18n="feat8Title">STARTUP OPTIMIZER</h3>
+                                    <p class="feature-short-desc" data-i18n="feat8Desc">Manage applications that launch on Windows boot. Enable or disable startup items with a click.</p>
+                                </div>
+                            </div>
+                            <button class="btn-more" data-i18n="learnMoreBtn">LEARN MORE</button>
+                        </div>
+                        <div class="feature-details">
+                            <div class="details-inner" data-i18n="feat8Ext">
+                                Startup details.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- App Preview Section -->
+        <section class="app-preview-section reveal">
+            <div class="section-header center">
+                <h2 data-i18n="previewTitle">INTERFACE</h2>
+            </div>
+            <div class="mockup-window-actual">
+                <div class="mockup-titlebar">
+                    <div class="mockup-title-text">CLARITY</div>
+                </div>
+                <div class="mockup-body-actual">
+                    <div class="mockup-sidebar-actual">
+                        <div class="mockup-brand-actual">
+                            <img id="mockup-logo-img" src="src/img/logo_white.png" alt="Clarity" style="width: 32px;">
+                            <span>CLARITY</span>
+                        </div>
+                        <div class="mockup-menu">
+                            <div class="mockup-menu-item active">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
+                                УПРАВЛЕНИЕ
+                            </div>
+                            <div class="mockup-menu-item">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none"><path d="M12 2L2 22h20L12 2z"/></svg>
+                                УТИЛИТЫ
+                            </div>
+                            <div class="mockup-menu-item">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                                НАСТРОЙКИ
+                            </div>
+                            <div class="mockup-menu-item">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                                ПОДДЕРЖАТЬ
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-content-actual">
+                        <div class="mockup-page-title">ПАНЕЛЬ УПРАВЛЕНИЯ</div>
+                        
+                        <div class="mockup-directory-card">
+                            <div style="font-size: 10px; font-weight: 700; color: var(--fg-muted); margin-bottom: 4px;">РАБОЧАЯ ДИРЕКТОРИЯ</div>
+                            <div style="font-size: 10px; color: var(--fg-muted); margin-bottom: 12px;">Папка не выбрана</div>
+                            <button class="mockup-btn">ВЫБРАТЬ ПАПКУ</button>
+                        </div>
+
+                        <div class="mockup-dashboard-grid">
+                            <div class="mockup-dash-card">
+                                <div class="icon-box">📁</div>
+                                <div class="dash-card-title">СОРТИРОВЩИК ФАЙЛОВ</div>
+                                <div class="dash-card-desc">Упорядочить файлы по категориям.</div>
+                            </div>
+                            <div class="mockup-dash-card">
+                                <div class="icon-box">⚡</div>
+                                <div class="dash-card-title">ОПТИМИЗАЦИЯ ОЗУ</div>
+                                <div class="dash-card-desc">Выгрузить неиспользуемую память ОЗУ.</div>
+                            </div>
+                            <div class="mockup-dash-card">
+                                <div class="icon-box">🗑️</div>
+                                <div class="dash-card-title">УБОРКА КЭША</div>
+                                <div class="dash-card-desc">Очистить временные системные файлы.</div>
+                            </div>
+                            <div class="mockup-dash-card">
+                                <div class="icon-box">📄</div>
+                                <div class="dash-card-title">ПОИСК ДУБЛИКАТОВ</div>
+                                <div class="dash-card-desc">Найти и стереть одинаковые файлы.</div>
+                            </div>
+                            <div class="mockup-dash-card">
+                                <div class="icon-box">📂</div>
+                                <div class="dash-card-title">УДАЛЕНИЕ ПУСТЫХ ПАПОК</div>
+                                <div class="dash-card-desc">Удалить папки без единого файла.</div>
+                            </div>
+                            <div class="mockup-dash-card">
+                                <div class="icon-box">🔍</div>
+                                <div class="dash-card-title">РАДАР ТЯЖЕЛЫХ ФАЙЛОВ</div>
+                                <div class="dash-card-desc">Найти и удалить тяжелые файлы.</div>
+                            </div>
+                            <div class="mockup-dash-card">
+                                <div class="icon-box">📋</div>
+                                <div class="dash-card-title">БУФЕР ОБМЕНА</div>
+                                <div class="dash-card-desc">Следить за скопированным текстом.</div>
+                            </div>
+                            <div class="mockup-dash-card">
+                                <div class="icon-box">🚀</div>
+                                <div class="dash-card-title">ОПТИМИЗАЦИЯ АВТОЗАГРУЗКИ</div>
+                                <div class="dash-card-desc">Управление автозапуском программ.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Languages Section -->
+        <section class="languages-section reveal">
+            <div class="container">
+                <h2 data-i18n="langTitle" class="section-title-left">LANGUAGE</h2>
+                <div class="languages-grid">
+                    <div class="lang-card active"><img src="https://flagcdn.com/gb.svg" class="flag-svg" alt="English"> <span class="lang-name">English</span></div>
+                    <div class="lang-card"><img src="https://flagcdn.com/ru.svg" class="flag-svg" alt="Русский"> <span class="lang-name">Русский</span></div>
+                    <div class="lang-card"><img src="https://flagcdn.com/cn.svg" class="flag-svg" alt="中文"> <span class="lang-name">中文</span></div>
+                    <div class="lang-card"><img src="https://flagcdn.com/es.svg" class="flag-svg" alt="Español"> <span class="lang-name">Español</span></div>
+                    <div class="lang-card"><img src="https://flagcdn.com/de.svg" class="flag-svg" alt="Deutsch"> <span class="lang-name">Deutsch</span></div>
+                    <div class="lang-card"><img src="https://flagcdn.com/jp.svg" class="flag-svg" alt="日本語"> <span class="lang-name">日本語</span></div>
+                    <div class="lang-card"><img src="https://flagcdn.com/pt.svg" class="flag-svg" alt="Português"> <span class="lang-name">Português</span></div>
+                    <div class="lang-card"><img src="https://flagcdn.com/bd.svg" class="flag-svg" alt="বাংলা"> <span class="lang-name">বাংলা</span></div>
+                    <div class="lang-card"><img src="https://flagcdn.com/in.svg" class="flag-svg" alt="हिन्दी"> <span class="lang-name">हिन्दी</span></div>
+                    <div class="lang-card"><img src="https://flagcdn.com/it.svg" class="flag-svg" alt="Italiano"> <span class="lang-name">Italiano</span></div>
+                    <div class="lang-card"><img src="https://flagcdn.com/tz.svg" class="flag-svg" alt="Kiswahili"> <span class="lang-name">Kiswahili</span></div>
+                    <div class="lang-card"><img src="https://flagcdn.com/id.svg" class="flag-svg" alt="Bahasa Indonesia"> <span class="lang-name">Bahasa Indonesia</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Section -->
+        <section class="support reveal">
+            <div class="container support-container">
+                <div class="support-left">
+                    <div class="huge-number accent-color">TRC</div>
+                    <h2 data-i18n="supportTitle">SUPPORT PROJECT</h2>
+                    <p data-i18n="supportDesc">If you like Clarity and want to fuel its evolution, you can support the development. USDT TRC20 network.</p>
+                </div>
+                <div class="support-right">
+                    <div class="crypto-card">
+                        <div class="crypto-header">
+                            <span data-i18n="walletAddress">WALLET ADDRESS</span>
+                            <div class="pulse-dot"></div>
+                        </div>
+                        <div class="crypto-key-wrapper">
+                            <code id="crypto-key">TRNWjg616ZDhc6gNiEmzeCwr1TYMBSFavM</code>
+                            <button id="copy-btn" class="magnetic" data-i18n="copyBtn">COPY</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-links" data-i18n="footerText">
+                © 2026 Clarity. ALL RIGHTS RESERVED. COPYING AND DISTRIBUTION OF MATERIALS IS PROHIBITED.<br><span style="color: var(--fg-muted); font-size: 8px;">CREATED BY CVZXEOV</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="src/js/script.js"></script>
+</body>
+</html>
