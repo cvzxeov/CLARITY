@@ -192,25 +192,40 @@ ipcMain.handle('start-sorting', async (event, folderPath: string, recursive: boo
     let processed = 0;
 
     for (const filePath of filesList) {
-      const ext = path.extname(filePath);
-      const baseName = path.basename(filePath, ext);
-
-      const category = getCategory(ext, fallbackName);
-      const targetFolder = path.join(folderPath, category);
-
-      if (!fs.existsSync(targetFolder)) {
-        fs.mkdirSync(targetFolder, { recursive: true });
+      // Skip the currently running app executable to prevent self-locking crashes
+      if (path.resolve(filePath) === path.resolve(process.execPath)) {
+        processed++;
+        continue;
       }
 
-      const newPath = getUniquePath(targetFolder, baseName, ext);
-      fs.renameSync(filePath, newPath);
+      try {
+        const ext = path.extname(filePath);
+        const baseName = path.basename(filePath, ext);
 
-      processed++;
-      event.sender.send('sort-progress', {
-        total,
-        processed,
-        log: `[Успех] ${path.basename(filePath)} -> /${category}/${path.basename(newPath)}`
-      });
+        const category = getCategory(ext, fallbackName);
+        const targetFolder = path.join(folderPath, category);
+
+        if (!fs.existsSync(targetFolder)) {
+          fs.mkdirSync(targetFolder, { recursive: true });
+        }
+
+        const newPath = getUniquePath(targetFolder, baseName, ext);
+        fs.renameSync(filePath, newPath);
+
+        processed++;
+        event.sender.send('sort-progress', {
+          total,
+          processed,
+          log: `[Успех] ${path.basename(filePath)} -> /${category}/${path.basename(newPath)}`
+        });
+      } catch (fileError: any) {
+        processed++;
+        event.sender.send('sort-progress', {
+          total,
+          processed,
+          log: `[Ошибка] ${path.basename(filePath)}: ${fileError.message}`
+        });
+      }
     }
 
     return { success: true, message: `Отсортировано файлов: ${processed}` };

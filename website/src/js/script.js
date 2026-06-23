@@ -201,27 +201,11 @@ btnMores.forEach(btn => {
 
 // Scroll Reveal is active
 
-// Custom Cyber Cursor & Parallax
-const cursorDot = document.createElement('div');
-cursorDot.classList.add('cyber-cursor-dot');
-document.body.appendChild(cursorDot);
-
-const cursorRing = document.createElement('div');
-cursorRing.classList.add('cyber-cursor-ring');
-document.body.appendChild(cursorRing);
-
-let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2;
-let ringX = window.innerWidth / 2;
-let ringY = window.innerHeight / 2;
-
+// Parallax Effect on mousemove
 document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
     
-    cursorDot.style.transform = `translate(${mouseX - 3}px, ${mouseY - 3}px)`;
-    
-    // Parallax Effect
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
     const moveX = (mouseX - centerX) * 0.05;
@@ -236,19 +220,4 @@ document.addEventListener('mousemove', (e) => {
     if (mockup) {
         mockup.style.transform = `translate(${-moveX * 0.3}px, ${-moveY * 0.3}px) rotateX(${moveY * 0.05}deg) rotateY(${-moveX * 0.05}deg)`;
     }
-});
-
-function animateRing() {
-    ringX += (mouseX - ringX) * 0.15;
-    ringY += (mouseY - ringY) * 0.15;
-    cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`;
-    requestAnimationFrame(animateRing);
-}
-animateRing();
-
-// Add hover states to interactive elements
-const interactiveEls = document.querySelectorAll('a, button, .brand, .feature-item, .lang-toggle, .theme-toggle');
-interactiveEls.forEach(el => {
-    el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
-    el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
 });
