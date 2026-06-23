@@ -50,7 +50,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "artifactName": "setup.exe"
+      "artifactName": "Clarity-Setup.exe"
     },
     "publish": [
       {

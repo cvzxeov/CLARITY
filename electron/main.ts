@@ -4,10 +4,6 @@ import * as fs from 'fs';
 import * as crypto from 'crypto';
 import { exec } from 'child_process';
 
-app.commandLine.appendSwitch('js-flags', '--optimize-for-size --max-old-space-size=128');
-app.commandLine.appendSwitch('disable-renderer-backgrounding');
-app.commandLine.appendSwitch('disable-background-timer-throttling');
-
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
 
 function createWindow() {

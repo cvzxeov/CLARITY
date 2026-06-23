@@ -80,6 +80,22 @@ const i18n = {
 
 let currentLang = 'en';
 
+// Preloader Logic
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+const preloader = document.getElementById('preloader');
+window.addEventListener('load', () => {
+    window.scrollTo(0, 0); // Force scroll to very top
+    // Hide preloader after 5 seconds
+    setTimeout(() => {
+        if (preloader) {
+            preloader.classList.add('hidden');
+            setTimeout(() => preloader.style.display = 'none', 500); // Remove from DOM flow
+        }
+    }, 5000);
+});
+
 // Elements
 const langToggle = document.getElementById('lang-toggle');
 const themeToggle = document.getElementById('theme-toggle');
@@ -213,7 +229,7 @@ document.addEventListener('mousemove', (e) => {
     
     const orbital = document.querySelector('.orbital-system');
     if (orbital) {
-        orbital.style.transform = `translate(${moveX}px, ${moveY}px) rotateX(${-moveY * 0.2}deg) rotateY(${moveX * 0.2}deg)`;
+        orbital.style.transform = `translate(${moveX * 0.2}px, ${moveY * 0.2}px) rotateX(${-moveY * 0.05}deg) rotateY(${moveX * 0.05}deg)`;
     }
     
     const mockup = document.querySelector('.mockup-window-actual');
